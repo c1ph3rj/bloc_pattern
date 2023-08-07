@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/src/blocs/validator.dart';
+import 'package:rxdart/rxdart.dart';
 
 class Bloc extends Validator {
-  final _emailFieldController = StreamController<String>();
-  final _passwordFieldController = StreamController<String>();
+  final _emailFieldController = BehaviorSubject<String>();
+  final _passwordFieldController = BehaviorSubject<String>();
 
   Function(String) get addEmail => _emailFieldController.sink.add;
 
@@ -15,6 +16,17 @@ class Bloc extends Validator {
 
   Stream<String> get password =>
       _passwordFieldController.stream.transform(validatePassword);
+
+  Stream<bool> get submitValid => Rx.combineLatest2(email, password, (a, b) {
+    return true;
+  });
+
+  submit() {
+    final String emailValue = _emailFieldController.value;
+    final String passwordValue = _passwordFieldController.value;
+
+    print("email : $emailValue\npassword : $passwordValue");
+  }
 
   dispose() {
     _emailFieldController.close();

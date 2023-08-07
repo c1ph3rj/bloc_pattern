@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          submitButton()
+          submitButton(bloc: bloc)
         ],
       ),
     );
@@ -45,7 +45,7 @@ Widget emailField({required Bloc bloc}) {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: TextField(
-            onChanged: bloc.addEmail,
+            onChanged:bloc.addEmail,
             style: GoogleFonts.aBeeZee(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
             keyboardType: TextInputType.emailAddress,
@@ -83,23 +83,29 @@ Widget passwordField({required Bloc bloc}) {
           ));
 }
 
-Widget submitButton() {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: SizedBox(
-      width: double.infinity,
-      height: 60,
-      child: MaterialButton(
-        onPressed: () {},
-        color: Colors.blue,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8))),
-        child: Text(
-          "Log In",
-          style: GoogleFonts.aBeeZee(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+Widget submitButton({required Bloc bloc}) {
+  return StreamBuilder<bool>(
+    stream: bloc.submitValid,
+    builder: (context, snapshot) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: double.infinity,
+          height: 60,
+          child: MaterialButton(
+            onPressed: (snapshot.hasError) ? null : bloc.submit,
+            color: Colors.blue,
+            disabledColor: Colors.grey,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: Text(
+              "Log In",
+              style: GoogleFonts.aBeeZee(
+                  color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
-      ),
-    ),
+      );
+    }
   );
 }

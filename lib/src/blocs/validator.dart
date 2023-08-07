@@ -6,6 +6,7 @@ class Validator {
     RegExp emailRegex = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     if (!emailRegex.hasMatch(email.trim())) {
+      sink.add("");
       sink.addError("Please enter a valid Email Address!");
     } else {
       sink.add(email);
@@ -17,6 +18,7 @@ class Validator {
         if(password.trim().length >= 8) {
           sink.add(password);
         }else {
+          sink.add("");
           sink.addError("Please enter a valid Password!");
         }
       }
